@@ -1,7 +1,7 @@
 import React from "react";
 import Plot from "react-plotly.js";
 
-function Graph({ tickerData }) {
+function Graph({ tickerData, colorChange }) {
   let data;
   let layout;
   let config;
@@ -14,7 +14,7 @@ function Graph({ tickerData }) {
         mode: "lines",
         x: x,
         y: y,
-        line: { color: "#17BECF" },
+        line: { color: colorChange },
       },
     ];
 

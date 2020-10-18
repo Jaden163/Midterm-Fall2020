@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import Header from "../components/Header";
 import Graph from "../components/Graph";
+import ArrowImage from "../components/ArrowImage";
 
 function Home() {
   const [company, setCompany] = useState("Tesla");
@@ -118,18 +119,38 @@ function Home() {
     };
   }, [companyData]);
 
-  const { intialPrice, currentPrice } = useMemo(() => {
+  const {
+    colorChange,
+    currentPrice,
+    initialPrice,
+    percentChange,
+    priceChange,
+  } = useMemo(() => {
+    let colorChange = "";
     let currentPrice = "";
-    let intialPrice = "";
+    let initialPrice = "";
+    let percentChange = "";
+    let priceChange = "";
 
     if (tickerData) {
-      console.log(tickerData);
       currentPrice = tickerData[0].close;
-      intialPrice = tickerData.slice(-1)[0].open;
+      initialPrice = tickerData.slice(-1)[0].open;
+      priceChange = (currentPrice - initialPrice).toFixed(2);
+      percentChange = ((priceChange / initialPrice) * 100).toFixed(2);
+      if (percentChange) {
+        if (percentChange >= 0) {
+          colorChange = "#0f9d58";
+        } else if (percentChange < 0) {
+          colorChange = "#d23f31";
+        }
+      }
     }
     return {
+      colorChange,
       currentPrice,
-      intialPrice,
+      initialPrice,
+      percentChange,
+      priceChange,
     };
   }, [tickerData]);
 
@@ -156,16 +177,27 @@ function Home() {
             </div>
 
             <div className="StockData">
-              <p className="StockData_Table">
-                <span className="StockData_currentPrice"> {currentPrice}</span>
-                <span className="StockData_initialPrice"> {intialPrice}</span>
+              <p className="StockData_Row">
+                <span className="StockData_currentPrice">{currentPrice}</span>
                 <span className="StockData_currency"> {currency} </span>
+              </p>
+              <p className="StockData_Row" style={{ color: `${colorChange}` }}>
+                <span className="StockData_priceChange">{priceChange}</span>
+                <span className="StockData_percentChange">
+                  ({percentChange}%)
+                </span>
+                <span className="StockData_Image">
+                  <ArrowImage
+                    percentChange={percentChange}
+                    colorChange={colorChange}
+                  />
+                </span>
               </p>
             </div>
           </div>
 
           <div className="StockPriceGraph">
-            <Graph tickerData={tickerData} />
+            <Graph tickerData={tickerData} colorChange={colorChange} />
           </div>
           <h3>Current Price</h3>
           <h4>% changes and $changes</h4>

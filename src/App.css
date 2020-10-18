@@ -73,21 +73,36 @@
 .StockData {
   border: 2px solid black;
   flex-basis: 60%;
-}
-
-.StockData_Table {
   margin: 0;
   text-align: center;
-  padding-top: 70px;
+  padding-top: 40px;
+}
+
+.StockData_Row {
+  font-weight: 400;
+  margin: 0;
+  padding-bottom: 5px;
 }
 
 .StockData_currentPrice {
-  margin: 0;
-  font-size: 30px;
+  font-size: 40px;
 }
-.StockData_initialPrice {
-}
+
 .StockData_currency {
+  font-size: 25px;
+}
+.StockData_priceChange {
+  font-size: 23px;
+  padding-right: 7px;
+}
+
+.StockData_percentChange {
+  font-size: 23px;
+  padding-right: 7px;
+}
+
+.StockData_Image {
+  font-size: 20px;
 }
 
 /* Stock Price Graph Styling */
