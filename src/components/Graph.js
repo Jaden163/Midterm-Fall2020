@@ -7,7 +7,7 @@ function Graph({ tickerData }) {
   let config;
   if (tickerData) {
     const x = tickerData.map((object) => object.date);
-    const y = tickerData.map((object) => object.open);
+    const y = tickerData.map((object) => object.close);
     data = [
       {
         type: "scatter",
@@ -17,8 +17,6 @@ function Graph({ tickerData }) {
         line: { color: "#17BECF" },
       },
     ];
-
-    console.log(data[0].x.slice(-1)[0]);
 
     layout = {
       autosize: false,

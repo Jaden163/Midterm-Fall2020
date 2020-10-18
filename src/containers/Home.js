@@ -43,7 +43,7 @@ function Home() {
             const targetDate = new Date(response.data[0].date).getDate();
             let i;
             for (i = 0; i < response.data.length; i++) {
-              if (new Date(response.data[i].date).getDate() != targetDate) {
+              if (new Date(response.data[i].date).getDate() !== targetDate) {
                 // find first index where date is not on the same day
                 break;
               }
@@ -83,6 +83,7 @@ function Home() {
     industry,
     sector,
     symbol,
+    price,
     website,
   } = useMemo(() => {
     let companyName = "";
@@ -117,6 +118,21 @@ function Home() {
     };
   }, [companyData]);
 
+  const { intialPrice, currentPrice } = useMemo(() => {
+    let currentPrice = "";
+    let intialPrice = "";
+
+    if (tickerData) {
+      console.log(tickerData);
+      currentPrice = tickerData[0].close;
+      intialPrice = tickerData.slice(-1)[0].open;
+    }
+    return {
+      currentPrice,
+      intialPrice,
+    };
+  }, [tickerData]);
+
   return (
     <div>
       <Header />
@@ -138,8 +154,13 @@ function Home() {
                 </a>
               </div>
             </div>
-            <div>
-              <div className="StockData"></div>
+
+            <div className="StockData">
+              <p className="StockData_Table">
+                <span className="StockData_currentPrice"> {currentPrice}</span>
+                <span className="StockData_initialPrice"> {intialPrice}</span>
+                <span className="StockData_currency"> {currency} </span>
+              </p>
             </div>
           </div>
 
