@@ -3,6 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 import Header from "../components/Header";
+import Graph from "../components/Graph";
 
 function Home() {
   const [company, setCompany] = useState("Tesla");
@@ -31,14 +32,24 @@ function Home() {
         // gets first result returned
         const ticker = response.data[0].symbol;
 
-        // get stock price data
+        // get stock price data on 1-minute interval
         axios
           .get(
-            "https://financialmodelingprep.com/api/v3/historical-chart/5min/AAPL?apikey=demo"
+            "https://financialmodelingprep.com/api/v3/historical-chart/1min/AAPL?apikey=demo"
             // `https://financialmodelingprep.com/api/v3/historical-chart/1min/${ticker}?apikey=${FMP_key}`
           )
           .then(function (response) {
-            setTickerData(response.data);
+            // filter data for 1-day prices. API also returns data from previous day so I wanted to skip those
+            const targetDate = new Date(response.data[0].date).getDate();
+            let i;
+            for (i = 0; i < response.data.length; i++) {
+              if (new Date(response.data[i].date).getDate() != targetDate) {
+                // find first index where date is not on the same day
+                break;
+              }
+            }
+            const filteredData = response.data.slice(0, i);
+            setTickerData(filteredData);
           })
           .catch(function (error) {
             console.log(error);
@@ -84,9 +95,7 @@ function Home() {
     let website = "";
 
     if (companyData) {
-      console.log(companyData);
       companyName = companyData.companyName;
-      console.log(companyName);
       currency = companyData.currency;
       exchangeShortName = companyData.exchangeShortName;
       imageURL = companyData.image;
@@ -113,22 +122,30 @@ function Home() {
       <Header />
       <main className="Home">
         <div>
-          <div className="CompanyInfo">
-            <img src={imageURL} alt={companyName} />
-            <div className="CompanyInfo_Description">
-              <p className="CompanyInfo_CompanyName">{companyName}</p>
-              <p className="CompanyInfo_Labels">
-                {exchangeShortName}: {symbol}
-              </p>
-              <p className="CompanyInfo_Labels">
-                {sector}: {industry}
-              </p>
-              <a href={website} className="CompanyInfo_Labels">
-                {website}
-              </a>
+          <div className="StockInfo">
+            <div className="CompanyInfo">
+              <img src={imageURL} alt={companyName} />
+              <div className="CompanyInfo_Description">
+                <p className="CompanyInfo_CompanyName">{companyName}</p>
+                <p className="CompanyInfo_Labels">
+                  {exchangeShortName}: {symbol}
+                </p>
+                <p className="CompanyInfo_Labels">
+                  {sector}: {industry}
+                </p>
+                <a href={website} className="CompanyInfo_Labels">
+                  {website}
+                </a>
+              </div>
+            </div>
+            <div>
+              <div className="StockData"></div>
             </div>
           </div>
 
+          <div className="StockPriceGraph">
+            <Graph tickerData={tickerData} />
+          </div>
           <h3>Current Price</h3>
           <h4>% changes and $changes</h4>
         </div>
