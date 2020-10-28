@@ -15,8 +15,11 @@ function Home() {
   const [tickerData, setTickerData] = useState(null);
   var ticker = "";
 
-  const FMP_key = process.env.REACT_APP_FMP_KEY;
-  const NEWS_key = process.env.REACT_APP_NEWS_KEY;
+  // const FMP_key = process.env.REACT_APP_FMP_KEY;
+  // const NEWS_key = process.env.REACT_APP_NEWS_KEY;
+
+  const FMP_key = "5afc7fa63a9b39462bc10791727eb042";
+  const NEWS_key = "069e101ac77f4e159a19d08ed2051b29";
 
   useEffect(() => {
     const searchParams = history.location.search;
@@ -36,7 +39,6 @@ function Home() {
       )
       .then(function (response) {
         // gets first result returned
-        console.log(response.data);
         ticker = response.data[0].symbol;
         // get stock price data on 1-minute interval
         axios
