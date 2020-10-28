@@ -33,16 +33,14 @@ function Graph({ tickerData, colorChange }) {
       },
     };
     config = { displayModeBar: false, responsive: true };
-  } else {
-    data = {};
-    layout = {};
-    config = {};
-  }
 
-  return (
-    <div className="Graph">
-      <Plot data={data} layout={layout} config={config} />
-    </div>
-  );
+    return (
+      <div className="Graph">
+        <Plot data={data} layout={layout} config={config} />
+      </div>
+    );
+  } else {
+    return <></>;
+  }
 }
 export default Graph;

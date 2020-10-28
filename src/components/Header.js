@@ -1,4 +1,5 @@
 import React from "react";
+import SearchBar from "../components/SearchBar";
 
 function Header() {
   return (
@@ -7,10 +8,19 @@ function Header() {
         <h1>StockNews</h1>
       </div>
       <nav>
-        <a href="/?city=New York City">New York City</a>
-        <a href="/?city=Chicago">Chicago</a>
-        <a href="/?city=Toronto">Toronto</a>
-        <a href="/?city=Shanghai">Shanghai</a>
+        <a className="HeaderLabel" href="/?company=Apple">
+          Apple
+        </a>
+        <a className="HeaderLabel" href="/?company=Advanced Micro Devices">
+          AMD
+        </a>
+        <a className="HeaderLabel" href="/?company=Microsoft">
+          Microsoft
+        </a>
+        <a className="HeaderLabel" href="/?company=Tesla">
+          Tesla
+        </a>
+        <SearchBar />
       </nav>
     </header>
   );

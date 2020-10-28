@@ -2,15 +2,21 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
+import ArrowImage from "../components/ArrowImage";
 import Header from "../components/Header";
 import Graph from "../components/Graph";
-import ArrowImage from "../components/ArrowImage";
+import News from "../components/News";
 
 function Home() {
   const [company, setCompany] = useState("Tesla");
   const history = useHistory();
   const [companyData, setCompanyData] = useState(null);
+  const [newsData, setNewsData] = useState(null);
   const [tickerData, setTickerData] = useState(null);
+  var ticker = "";
+
+  const FMP_key = process.env.REACT_APP_FMP_KEY;
+  const NEWS_key = process.env.REACT_APP_NEWS_KEY;
 
   useEffect(() => {
     const searchParams = history.location.search;
@@ -26,18 +32,16 @@ function Home() {
 
     axios
       .get(
-        "https://financialmodelingprep.com/api/v3/search?query=AA&limit=10&apikey=demo"
-        // `https://financialmodelingprep.com/api/v3/search?query=${company}&limit=10&apikey=${FMP_key}`
+        `https://financialmodelingprep.com/api/v3/search?query=${company}&exchange=NASDAQ&limit=10&apikey=${FMP_key}`
       )
       .then(function (response) {
         // gets first result returned
-        const ticker = response.data[0].symbol;
-
+        console.log(response.data);
+        ticker = response.data[0].symbol;
         // get stock price data on 1-minute interval
         axios
           .get(
-            "https://financialmodelingprep.com/api/v3/historical-chart/1min/AAPL?apikey=demo"
-            // `https://financialmodelingprep.com/api/v3/historical-chart/1min/${ticker}?apikey=${FMP_key}`
+            `https://financialmodelingprep.com/api/v3/historical-chart/1min/${ticker}?apikey=${FMP_key}`
           )
           .then(function (response) {
             // filter data for 1-day prices. API also returns data from previous day so I wanted to skip those
@@ -59,8 +63,7 @@ function Home() {
         // get company profile data
         axios
           .get(
-            "https://financialmodelingprep.com/api/v3/profile/AAPL?apikey=demo"
-            // `https://financialmodelingprep.com/api/v3/profile/${ticker}?apikey=${FMP_key}`
+            `https://financialmodelingprep.com/api/v3/profile/${ticker}?apikey=${FMP_key}`
           )
           .then(function (response) {
             setCompanyData(response.data[0]);
@@ -68,8 +71,19 @@ function Home() {
           .catch(function (error) {
             console.log(error);
           });
+        // API for news
+        axios
+          .get(
+            `https://newsapi.org/v2/everything?qInTitle=${ticker}&language=en&from=2020-10-20&sortBy=relevancy&pageSize=10&apiKey=${NEWS_key}`
+          )
+          .then(function (response) {
+            // get request to URL
+            setNewsData(response.data.articles);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       })
-
       .catch(function (error) {
         // error handle
         console.log(error);
@@ -84,7 +98,6 @@ function Home() {
     industry,
     sector,
     symbol,
-    price,
     website,
   } = useMemo(() => {
     let companyName = "";
@@ -133,8 +146,8 @@ function Home() {
     let priceChange = "";
 
     if (tickerData) {
-      currentPrice = tickerData[0].close;
-      initialPrice = tickerData.slice(-1)[0].open;
+      currentPrice = tickerData[0].close.toFixed(2);
+      initialPrice = tickerData.slice(-1)[0].open.toFixed(2);
       priceChange = (currentPrice - initialPrice).toFixed(2);
       percentChange = ((priceChange / initialPrice) * 100).toFixed(2);
       if (percentChange) {
@@ -155,13 +168,17 @@ function Home() {
   }, [tickerData]);
 
   return (
-    <div>
+    <div className="Page">
       <Header />
       <main className="Home">
         <div>
           <div className="StockInfo">
             <div className="CompanyInfo">
-              <img src={imageURL} alt={companyName} />
+              <img
+                className="ComapnyInfo_CompanyImage"
+                src={imageURL}
+                alt={companyName}
+              />
               <div className="CompanyInfo_Description">
                 <p className="CompanyInfo_CompanyName">{companyName}</p>
                 <p className="CompanyInfo_Labels">
@@ -199,8 +216,7 @@ function Home() {
           <div className="StockPriceGraph">
             <Graph tickerData={tickerData} colorChange={colorChange} />
           </div>
-          <h3>Current Price</h3>
-          <h4>% changes and $changes</h4>
+          <News newsData={newsData} />
         </div>
       </main>
     </div>

@@ -1,5 +1,6 @@
-/* Header styling */
+/* Web Page Styling */
 
+/* Header styling */
 .Header {
   align-items: center;
   display: flex;
@@ -11,14 +12,50 @@
 
 .Header nav a {
   color: black;
-  font-size: bold;
-  font-weight: normal;
-  margin: 0 10px;
+  font-weight: bold;
   text-decoration: none;
 }
 
 .Header nav a:hover {
-  color: #64376b;
+  color: #2c528c;
+}
+
+.HeaderLabel {
+  margin: 10px;
+}
+
+/* Search Bar Styling */
+.SearchFormAnchor {
+  margin: 0;
+  margin-left: 10px;
+}
+
+.SearchForm {
+  display: inline-block;
+  margin: 0;
+  width: auto;
+}
+
+.SearchBox {
+  border: 1px solid grey;
+  border-right: none;
+  font-weight: bold;
+}
+
+.SearchBox:focus {
+  outline-width: 0;
+}
+
+.SearchIcon {
+  border: 1px solid grey;
+  border-left: none;
+  background: white;
+  color: black;
+  margin: none;
+}
+
+.SearchBoxIcon:active {
+  outline-width: 0;
 }
 
 /* Home Styling */
@@ -42,12 +79,16 @@
 
 .CompanyInfo {
   align-items: center;
-  border: 2px solid black;
+  border-right: 2px solid black;
   display: flex;
   flex-basis: 40%;
   flex-direction: row;
   margin: 0px;
   padding: 20px;
+}
+
+.ComapnyInfo_CompanyImage {
+  padding: 10px;
 }
 
 .CompanyInfo_Description {
@@ -71,7 +112,6 @@
 }
 
 .StockData {
-  border: 2px solid black;
   flex-basis: 60%;
   margin: 0;
   text-align: center;
@@ -109,6 +149,77 @@
 
 .StockPriceGraph {
   border: 2px solid black;
+  border-top: none;
   margin: 0 auto;
   padding: 20px 0;
+}
+
+/* Styling for News Listing */
+.News_Headlines {
+  font-weight: bolder;
+  font-size: 30px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid black;
+}
+
+/* Styling for Article Cards */
+.ArticleCard {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  padding: 25px 30px;
+  margin: 30px 0;
+  text-align: left;
+}
+.ArticleCardImage {
+  flex-basis: 40%;
+  padding-right: 30px;
+}
+
+.ArticleCardImage img {
+  height: auto;
+  width: 100%;
+}
+
+.ArticleCardText {
+  flex-basis: 60%;
+}
+
+.ArticleText_Title {
+  font-weight: bolder;
+  font-size: 20px;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.ArticleText_Author {
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.ArticleText_Desc {
+  font-size: 15px;
+  margin: 0;
+}
+
+@media screen and (max-width: 640px) {
+  .Header {
+    flex-direction: column;
+  }
+
+  .Header nav a {
+    font-size: 12px;
+  }
+
+  .StockInfo {
+    flex-direction: column;
+    border: 2px solid black;
+    border-bottom: none;
+  }
+
+  .CompanyInfo {
+    flex-direction: column;
+  }
 }
